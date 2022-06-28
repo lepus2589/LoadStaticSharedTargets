@@ -15,7 +15,7 @@ include(FetchContent)
 FetchContent_Declare(
     LoadStaticSharedTargets
     GIT_REPOSITORY "https://github.com/lepus2589/LoadStaticSharedTargets.git"
-    GIT_TAG v1.1
+    GIT_TAG v1.2
 )
 FetchContent_MakeAvailable(LoadStaticSharedTargets)
 FetchContent_GetProperties(

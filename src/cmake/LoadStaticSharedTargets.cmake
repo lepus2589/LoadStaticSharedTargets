@@ -50,26 +50,26 @@ load_static_shared_targets(
 ]]
 
 macro(load_static_shared_targets)
-    set(${CMAKE_FIND_PACKAGE_NAME}_known_comps static shared)
-    set(${CMAKE_FIND_PACKAGE_NAME}_comp_static NO)
-    set(${CMAKE_FIND_PACKAGE_NAME}_comp_shared NO)
+    set(${CMAKE_FIND_PACKAGE_NAME}_KNOWN_COMPS static shared)
+    set(${CMAKE_FIND_PACKAGE_NAME}_COMP_static NO)
+    set(${CMAKE_FIND_PACKAGE_NAME}_COMP_shared NO)
 
     # Iterate the list of requested components given to `find_package()`
-    foreach (${CMAKE_FIND_PACKAGE_NAME}_comp IN LISTS ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
+    foreach (${CMAKE_FIND_PACKAGE_NAME}_COMP IN LISTS ${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS)
         # If it's a valid component, turn on the respective switch.
-        if (${CMAKE_FIND_PACKAGE_NAME}_comp IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_known_comps)
-            set(${CMAKE_FIND_PACKAGE_NAME}_comp_${${CMAKE_FIND_PACKAGE_NAME}_comp} YES)
+        if (${CMAKE_FIND_PACKAGE_NAME}_COMP IN_LIST ${CMAKE_FIND_PACKAGE_NAME}_KNOWN_COMPS)
+            set(${CMAKE_FIND_PACKAGE_NAME}_COMP_${${CMAKE_FIND_PACKAGE_NAME}_COMP} YES)
         # Else do error handling.
         else ()
             set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE
-                "${CMAKE_FIND_PACKAGE_NAME} does not recognize component `${${CMAKE_FIND_PACKAGE_NAME}_comp}`.")
+                "${CMAKE_FIND_PACKAGE_NAME} does not recognize component `${${CMAKE_FIND_PACKAGE_NAME}_COMP}`.")
             set(${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
             return()
         endif ()
     endforeach ()
 
     # Components static and shared are mutually exclusive.
-    if (${CMAKE_FIND_PACKAGE_NAME}_comp_static AND ${CMAKE_FIND_PACKAGE_NAME}_comp_shared)
+    if (${CMAKE_FIND_PACKAGE_NAME}_COMP_static AND ${CMAKE_FIND_PACKAGE_NAME}_COMP_shared)
         set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE
             "${CMAKE_FIND_PACKAGE_NAME} `static` and `shared` components are mutually exclusive.")
         set(${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
@@ -77,91 +77,54 @@ macro(load_static_shared_targets)
     endif ()
 
     # Parse static and shared targets from argument list.
-    _static_shared_parse_args(${ARGN})
+    set(${CMAKE_FIND_PACKAGE_NAME}_ARGUMENT_KEYWORDS STATIC_TARGETS SHARED_TARGETS)
+    cmake_parse_arguments(${CMAKE_FIND_PACKAGE_NAME} "" "" "${${CMAKE_FIND_PACKAGE_NAME}_ARGUMENT_KEYWORDS}" ${ARGN})
+    # We now have ${CMAKE_FIND_PACKAGE_NAME}_STATIC_TARGETS and
+    # ${CMAKE_FIND_PACKAGE_NAME}_SHARED_TARGETS variables created for us.
 
     # Static component requested
-    if (${CMAKE_FIND_PACKAGE_NAME}_comp_static)
-        _static_shared_load_targets(static)
+    if (${CMAKE_FIND_PACKAGE_NAME}_COMP_static)
+        _static_shared_load_targets(STATIC)
     # Shared component requested
-    elseif (${CMAKE_FIND_PACKAGE_NAME}_comp_shared)
-        _static_shared_load_targets(shared)
+    elseif (${CMAKE_FIND_PACKAGE_NAME}_COMP_shared)
+        _static_shared_load_targets(SHARED)
     # ${CMAKE_FIND_PACKAGE_NAME}_SHARED_LIBS cache variable set to ON
     elseif (DEFINED ${CMAKE_FIND_PACKAGE_NAME}_SHARED_LIBS AND ${CMAKE_FIND_PACKAGE_NAME}_SHARED_LIBS)
-        _static_shared_load_targets(shared)
+        _static_shared_load_targets(SHARED)
     # ${CMAKE_FIND_PACKAGE_NAME}_SHARED_LIBS cache variable set to OFF
     elseif (DEFINED ${CMAKE_FIND_PACKAGE_NAME}_SHARED_LIBS AND NOT ${CMAKE_FIND_PACKAGE_NAME}_SHARED_LIBS)
-        _static_shared_load_targets(static)
+        _static_shared_load_targets(STATIC)
     # BUILD_SHARED_LIBS variable set to ON
     elseif (BUILD_SHARED_LIBS)
         # If shared target is installed, include it.
-        if (EXISTS "${${CMAKE_FIND_PACKAGE_NAME}_shared_targets}")
-            _static_shared_load_targets(shared)
+        if (EXISTS "${${CMAKE_FIND_PACKAGE_NAME}_SHARED_TARGETS}")
+            _static_shared_load_targets(SHARED)
         # Otherwise at least load the static target
         else ()
-            _static_shared_load_targets(static)
+            _static_shared_load_targets(STATIC)
         endif ()
     # BUILD_SHARED_LIBS variable set to OFF
     else ()
         # If static target is installed, include it.
-        if (EXISTS "${${CMAKE_FIND_PACKAGE_NAME}_static_targets}")
-            _static_shared_load_targets(static)
+        if (EXISTS "${${CMAKE_FIND_PACKAGE_NAME}_STATIC_TARGETS}")
+            _static_shared_load_targets(STATIC)
         # Otherwise at least load the shared target
         else ()
-            _static_shared_load_targets(shared)
+            _static_shared_load_targets(SHARED)
         endif ()
     endif ()
 endmacro()
 
 # Macro to check, if the requested file with the exported targets is installed.
 # Do error handling if not, include it otherwise.
-macro(_static_shared_load_targets type)
-    foreach (${CMAKE_FIND_PACKAGE_NAME}_target ${${CMAKE_FIND_PACKAGE_NAME}_${type}_targets})
-        if (NOT EXISTS "${${CMAKE_FIND_PACKAGE_NAME}_target}")
+macro(_static_shared_load_targets TYPE)
+    foreach (${CMAKE_FIND_PACKAGE_NAME}_TARGET ${${CMAKE_FIND_PACKAGE_NAME}_${TYPE}_TARGETS})
+        if (NOT EXISTS "${${CMAKE_FIND_PACKAGE_NAME}_TARGET}")
             set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE
-                "${CMAKE_FIND_PACKAGE_NAME} `${type}` libraries were requested but not found.")
+                "${CMAKE_FIND_PACKAGE_NAME} `${TYPE}` libraries were requested but not found.")
             set(${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
             return()
         endif ()
-        include("${${CMAKE_FIND_PACKAGE_NAME}_target}")
+        include("${${CMAKE_FIND_PACKAGE_NAME}_TARGET}")
     endforeach ()
-endmacro()
-
-# Parse the list of static targets and the list of shared targets from the macro
-# arguments.
-macro(_static_shared_parse_args)
-    set(_STATIC_SHARED_EXTRA_MACRO_ARGS ${ARGN})
-    list(FIND _STATIC_SHARED_EXTRA_MACRO_ARGS STATIC_TARGETS _STATIC_SHARED_STATIC_OPTION_INDEX)
-    list(FIND _STATIC_SHARED_EXTRA_MACRO_ARGS SHARED_TARGETS _STATIC_SHARED_SHARED_OPTION_INDEX)
-
-    if (NOT _STATIC_SHARED_STATIC_OPTION_INDEX EQUAL -1 AND NOT _STATIC_SHARED_SHARED_OPTION_INDEX EQUAL -1)
-        math(EXPR _STATIC_SHARED_STATIC_START_INDEX "${_STATIC_SHARED_STATIC_OPTION_INDEX} + 1")
-        math(EXPR _STATIC_SHARED_SHARED_START_INDEX "${_STATIC_SHARED_SHARED_OPTION_INDEX} + 1")
-
-        if (_STATIC_SHARED_STATIC_OPTION_INDEX LESS _STATIC_SHARED_SHARED_OPTION_INDEX)
-            math(EXPR _STATIC_SHARED_STATIC_LENGTH "${_STATIC_SHARED_SHARED_OPTION_INDEX} - ${_STATIC_SHARED_STATIC_START_INDEX}")
-            set(_STATIC_SHARED_SHARED_LENGTH -1)
-        else ()
-            set(_STATIC_SHARED_STATIC_LENGTH -1)
-            math(EXPR _STATIC_SHARED_SHARED_LENGTH "${_STATIC_SHARED_STATIC_OPTION_INDEX} - ${_STATIC_SHARED_SHARED_START_INDEX}")
-        endif ()
-
-        list(
-            SUBLIST
-            _STATIC_SHARED_EXTRA_MACRO_ARGS
-            ${_STATIC_SHARED_SHARED_START_INDEX}
-            ${_STATIC_SHARED_SHARED_LENGTH}
-            ${CMAKE_FIND_PACKAGE_NAME}_shared_targets
-        )
-
-        list(
-            SUBLIST
-            _STATIC_SHARED_EXTRA_MACRO_ARGS
-            ${_STATIC_SHARED_STATIC_START_INDEX}
-            ${_STATIC_SHARED_STATIC_LENGTH}
-            ${CMAKE_FIND_PACKAGE_NAME}_static_targets
-        )
-    # Else do error handling.
-    else ()
-        message(FATAL_ERROR "load_static_shared_targets() has been called with invalid arguments!")
-    endif ()
 endmacro()
