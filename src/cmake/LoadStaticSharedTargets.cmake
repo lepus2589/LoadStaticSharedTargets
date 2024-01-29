@@ -1,7 +1,7 @@
 #[[
 MIT License
 
-Copyright (c) 2022 Tim Haase
+Copyright (c) 2024 Tim Kaune
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -96,35 +96,69 @@ macro(load_static_shared_targets)
         _static_shared_load_targets(STATIC)
     # BUILD_SHARED_LIBS variable set to ON
     elseif (BUILD_SHARED_LIBS)
-        # If shared target is installed, include it.
-        if (EXISTS "${${CMAKE_FIND_PACKAGE_NAME}_SHARED_TARGETS}")
-            _static_shared_load_targets(SHARED)
-        # Otherwise at least load the static target
-        else ()
-            _static_shared_load_targets(STATIC)
-        endif ()
+        # If shared targets are installed, include them.
+        # Otherwise at least load the static targets
+        _static_shared_load_targets(SHARED ALTERNATIVE STATIC)
     # BUILD_SHARED_LIBS variable set to OFF
     else ()
-        # If static target is installed, include it.
-        if (EXISTS "${${CMAKE_FIND_PACKAGE_NAME}_STATIC_TARGETS}")
-            _static_shared_load_targets(STATIC)
-        # Otherwise at least load the shared target
-        else ()
-            _static_shared_load_targets(SHARED)
-        endif ()
+        # If static targets are installed, include them.
+        # Otherwise at least load the shared targets
+        _static_shared_load_targets(STATIC ALTERNATIVE SHARED)
     endif ()
+
+    unset(${CMAKE_FIND_PACKAGE_NAME}_KNOWN_COMPS)
+    unset(${CMAKE_FIND_PACKAGE_NAME}_COMP_static)
+    unset(${CMAKE_FIND_PACKAGE_NAME}_COMP_shared)
+    unset(${CMAKE_FIND_PACKAGE_NAME}_ARGUMENT_KEYWORDS)
+    unset(${CMAKE_FIND_PACKAGE_NAME}_STATIC_TARGETS)
+    unset(${CMAKE_FIND_PACKAGE_NAME}_SHARED_TARGETS)
 endmacro()
 
-# Macro to check, if the requested file with the exported targets is installed.
-# Do error handling if not, include it otherwise.
+# Macro to check, if the target files for the requested type are all installed.
+# If so, include them. Otherwise, try alternative type, if given. Do error
+# handling, if not.
 macro(_static_shared_load_targets TYPE)
-    foreach (${CMAKE_FIND_PACKAGE_NAME}_TARGET ${${CMAKE_FIND_PACKAGE_NAME}_${TYPE}_TARGETS})
-        if (NOT EXISTS "${${CMAKE_FIND_PACKAGE_NAME}_TARGET}")
-            set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE
-                "${CMAKE_FIND_PACKAGE_NAME} `${TYPE}` libraries were requested but not found.")
-            set(${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
-            return()
+    cmake_parse_arguments(${CMAKE_FIND_PACKAGE_NAME} "" "ALTERNATIVE" "" ${ARGN})
+    # We now have ${CMAKE_FIND_PACKAGE_NAME}_ALTERNATIVE variable created for us.
+
+    set(${CMAKE_FIND_PACKAGE_NAME}_${TYPE}_FOUND TRUE)
+
+    foreach (
+        ${CMAKE_FIND_PACKAGE_NAME}_${TYPE}_TARGET
+        IN LISTS
+        ${CMAKE_FIND_PACKAGE_NAME}_${TYPE}_TARGETS
+    )
+        # Check, if any of the targets for the requested TYPE does not exist
+        if (NOT EXISTS "${${CMAKE_FIND_PACKAGE_NAME}_${TYPE}_TARGET}")
+            set(${CMAKE_FIND_PACKAGE_NAME}_${TYPE}_FOUND FALSE)
+            break ()
         endif ()
-        include("${${CMAKE_FIND_PACKAGE_NAME}_TARGET}")
     endforeach ()
+
+    # If TYPE targets are all installed, include them.
+    if (${CMAKE_FIND_PACKAGE_NAME}_${TYPE}_FOUND)
+        foreach (
+            ${CMAKE_FIND_PACKAGE_NAME}_${TYPE}_TARGET
+            IN LISTS
+            ${CMAKE_FIND_PACKAGE_NAME}_${TYPE}_TARGETS
+        )
+            # We know they all exist.
+            include("${${CMAKE_FIND_PACKAGE_NAME}_${TYPE}_TARGET}")
+        endforeach ()
+    # Otherwise at least load the ALTERNATIVE targets, if given
+    elseif (DEFINED ${CMAKE_FIND_PACKAGE_NAME}_ALTERNATIVE)
+        message(WARNING
+            "Requested `${TYPE}` targets for package ${CMAKE_FIND_PACKAGE_NAME} were not found. "
+            "Trying alternative `${${CMAKE_FIND_PACKAGE_NAME}_ALTERNATIVE}` targets."
+        )
+        _static_shared_load_targets(${${CMAKE_FIND_PACKAGE_NAME}_ALTERNATIVE})
+    else ()
+        set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE
+            "${CMAKE_FIND_PACKAGE_NAME} `${TYPE}` libraries were requested but not found.")
+        set(${CMAKE_FIND_PACKAGE_NAME}_FOUND FALSE)
+        return()
+    endif ()
+
+    unset(${CMAKE_FIND_PACKAGE_NAME}_${TYPE}_FOUND)
+    unset(${CMAKE_FIND_PACKAGE_NAME}_ALTERNATIVE)
 endmacro()
