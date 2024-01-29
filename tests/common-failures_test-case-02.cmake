@@ -23,42 +23,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ]]
 
-cmake_minimum_required(VERSION 3.25)
+set(
+    STATIC_TEST_TARGET_FILES
+    "./mocks/failure-target1.cmake"
+    "./mocks/failure-target2.cmake"
+)
+set(
+    SHARED_TEST_TARGET_FILES
+    "./mocks/failure-target1.cmake"
+    "./mocks/failure-target2.cmake"
+)
 
-# If CMake >=3.24 is used, set policies up to v3.24 to NEW
-# if (NOT ${CMAKE_VERSION} VERSION_LESS 3.24)
-#     cmake_policy(VERSION 3.24)
-# endif()
 
-project(LoadStaticSharedTargets VERSION 1.3.0 LANGUAGES NONE)
+TEST_CASE("Fail, if both `shared` and `static` find components are being used together: ")
 
-include(GNUInstallDirs)
+set(${CMAKE_FIND_PACKAGE_NAME}_FIND_COMPONENTS "shared" "static")
 
-string(COMPARE EQUAL "${CMAKE_PROJECT_NAME}" "${PROJECT_NAME}" IS_TOP_LEVEL)
+include("./helpers/testee_macro_wrapper.cmake")
 
-if (IS_TOP_LEVEL)
-    include(CTest)
-    set(CMAKE_CTEST_ARGUMENTS "--verbose")
-endif ()
-
-# LoadStaticSharedTargets is a CMake script, which we never want to debug
-# If using a multi config generator
-if (GENERATOR_IS_MULTI_CONFIG)
-    set(CMAKE_CONFIGURATION_TYPES "Release")
-    set(CMAKE_DEFAULT_BUILD_TYPE "Release")
-# If using a single config generator
-else ()
-    set(CMAKE_BUILD_TYPE "Release")
-endif ()
-
-add_subdirectory(src)
-
-if (IS_TOP_LEVEL AND BUILD_TESTING)
-    add_subdirectory(tests)
-endif ()
-
-option(LoadStaticSharedTargets_INCLUDE_PACKAGING "Include packaging rules for LoadStaticSharedTargets" "${IS_TOP_LEVEL}")
-
-if (LoadStaticSharedTargets_INCLUDE_PACKAGING)
-    add_subdirectory(packaging)
-endif ()
+CHECK_STREQUAL(
+    ${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE
+    "${CMAKE_FIND_PACKAGE_NAME} `static` and `shared` components are mutually exclusive."
+)
+REQUIRE_FALSY(${CMAKE_FIND_PACKAGE_NAME}_FOUND)
+REQUIRE_UNDEFINED(TEST_TARGET_1)
+REQUIRE_UNDEFINED(TEST_TARGET_2)

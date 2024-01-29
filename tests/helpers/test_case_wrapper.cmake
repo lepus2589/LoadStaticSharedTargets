@@ -23,42 +23,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ]]
 
-cmake_minimum_required(VERSION 3.25)
+cmake_policy(VERSION ${CMAKE_MINIMUM_REQUIRED_VERSION})
 
-# If CMake >=3.24 is used, set policies up to v3.24 to NEW
-# if (NOT ${CMAKE_VERSION} VERSION_LESS 3.24)
-#     cmake_policy(VERSION 3.24)
-# endif()
+include("./helpers/assertions.cmake")
+include("../src/cmake/LoadStaticSharedTargets.cmake")
 
-project(LoadStaticSharedTargets VERSION 1.3.0 LANGUAGES NONE)
+# find_package() mock
+set(CMAKE_FIND_PACKAGE_NAME "test")
 
-include(GNUInstallDirs)
-
-string(COMPARE EQUAL "${CMAKE_PROJECT_NAME}" "${PROJECT_NAME}" IS_TOP_LEVEL)
-
-if (IS_TOP_LEVEL)
-    include(CTest)
-    set(CMAKE_CTEST_ARGUMENTS "--verbose")
-endif ()
-
-# LoadStaticSharedTargets is a CMake script, which we never want to debug
-# If using a multi config generator
-if (GENERATOR_IS_MULTI_CONFIG)
-    set(CMAKE_CONFIGURATION_TYPES "Release")
-    set(CMAKE_DEFAULT_BUILD_TYPE "Release")
-# If using a single config generator
-else ()
-    set(CMAKE_BUILD_TYPE "Release")
-endif ()
-
-add_subdirectory(src)
-
-if (IS_TOP_LEVEL AND BUILD_TESTING)
-    add_subdirectory(tests)
-endif ()
-
-option(LoadStaticSharedTargets_INCLUDE_PACKAGING "Include packaging rules for LoadStaticSharedTargets" "${IS_TOP_LEVEL}")
-
-if (LoadStaticSharedTargets_INCLUDE_PACKAGING)
-    add_subdirectory(packaging)
-endif ()
+include("./${TEST_CASE}.cmake")
