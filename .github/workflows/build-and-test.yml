@@ -1,0 +1,24 @@
+name: build-and-test
+run-name: Build and test ${{ github.ref_type }} ${{ github.ref_name }}
+on: push
+jobs:
+  cmake:
+    name: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: prepare
+        run: sudo apt-get install -y ninja-build
+      - name: info
+        run: |
+          git version
+          cmake --version
+          ninja --version
+      - uses: actions/checkout@v4
+      - name: configure
+        run: cmake --preset default
+      - name: build
+        run: cmake --build ./build --verbose
+      - name: install
+        run: cmake --install ./build --prefix ./bin
+      - name: test
+        run: cmake --build ./build --target test
