@@ -24,3 +24,5 @@ SOFTWARE.
 ]]
 
 target_sources(LoadStaticSharedTargets PRIVATE LoadStaticSharedTargets.cmake)
+
+include(LoadStaticSharedTargets.cmake)
