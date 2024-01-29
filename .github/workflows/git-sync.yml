@@ -1,9 +1,17 @@
-on: push
+name: sync-git-mirror
+run-name: Push ${{ github.ref_type }} ${{ github.ref_name }} to git mirror
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - v*
 jobs:
   git-sync:
     runs-on: ubuntu-latest
     steps:
       - name: git-sync-master
+        if: ${{ github.ref_type == 'branch' }}
         uses: wei/git-sync@v3
         with:
           source_repo: "lepus2589/LoadStaticSharedTargets"
@@ -12,6 +20,7 @@ jobs:
           destination_branch: "master"
           destination_ssh_private_key: ${{ secrets.DESTINATION_SSH_PRIVATE_KEY }}
       - name: git-sync-tags
+        if: ${{ github.ref_type == 'tag' }}
         uses: wei/git-sync@v3
         with:
           source_repo: "lepus2589/LoadStaticSharedTargets"
