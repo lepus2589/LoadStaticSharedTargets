@@ -34,6 +34,8 @@ project(LoadStaticSharedTargets VERSION 1.3.0 LANGUAGES NONE)
 
 include(GNUInstallDirs)
 
+string(COMPARE EQUAL "${CMAKE_PROJECT_NAME}" "${PROJECT_NAME}" IS_TOP_LEVEL)
+
 # LoadStaticSharedTargets is a CMake script, which we never want to debug
 # If using a multi config generator
 if (GENERATOR_IS_MULTI_CONFIG)
@@ -46,8 +48,7 @@ endif ()
 
 add_subdirectory(src)
 
-string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}" is_top_level)
-option(LoadStaticSharedTargets_INCLUDE_PACKAGING "Include packaging rules for LoadStaticSharedTargets" "${is_top_level}")
+option(LoadStaticSharedTargets_INCLUDE_PACKAGING "Include packaging rules for LoadStaticSharedTargets" "${IS_TOP_LEVEL}")
 
 if (LoadStaticSharedTargets_INCLUDE_PACKAGING)
     add_subdirectory(packaging)
