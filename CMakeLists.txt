@@ -30,7 +30,7 @@ cmake_minimum_required(VERSION 3.25)
 #     cmake_policy(VERSION 3.24)
 # endif()
 
-project(LoadStaticSharedTargets VERSION 1.4.0 LANGUAGES NONE)
+project(LoadStaticSharedTargets VERSION 1.4.1 LANGUAGES NONE)
 
 include(GNUInstallDirs)
 
