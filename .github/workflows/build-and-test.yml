@@ -21,4 +21,4 @@ jobs:
       - name: install
         run: cmake --build --preset ninja --verbose --target install
       - name: test
-        run: cmake --build --preset ninja --verbose --target test
+        run: cmake --build --preset ninja --verbose --target check

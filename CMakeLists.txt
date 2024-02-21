@@ -54,7 +54,9 @@ endif ()
 add_subdirectory(src)
 
 if (IS_TOP_LEVEL AND BUILD_TESTING)
-    add_subdirectory(tests)
+    add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} -V)
+
+    add_subdirectory(tests EXCLUDE_FROM_ALL)
 endif ()
 
 option(LoadStaticSharedTargets_INCLUDE_PACKAGING "Include packaging rules for LoadStaticSharedTargets" "${IS_TOP_LEVEL}")
