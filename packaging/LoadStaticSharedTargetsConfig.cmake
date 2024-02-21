@@ -23,12 +23,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ]]
 
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.25)
 
 # If CMake >=3.24 is used, set policies up to v3.24 to NEW
-if (NOT ${CMAKE_VERSION} VERSION_LESS 3.24)
-    cmake_policy(VERSION 3.24)
-endif()
+# if (NOT ${CMAKE_VERSION} VERSION_LESS 3.24)
+#     cmake_policy(VERSION 3.24)
+# endif()
 
 # include(LoadStaticSharedTargets) should work after this
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
