@@ -11,20 +11,58 @@ What you need:
 
 - [Git](https://git-scm.com/) (optional) for getting the code and contributing
   to the project
-- [CMake](https://cmake.org/) for building the project
+- [CMake](https://cmake.org/) and [Ninja](https://ninja-build.org/) for building
+  the project
+
+### Linux (Ubuntu) ###
+
+Use your distribution's package manager to install the packages `cmake` and
+`ninja-build`.
+
+```shell
+$ sudo apt-get install cmake ninja-build
+```
+
+### Mac OS X ###
+
+#### Homebrew ####
+
+```shell
+$ brew install cmake ninja
+```
+
+#### MacPorts ####
+
+```shell
+$ sudo port install cmake ninja
+```
+
+### Windows ###
+
+Install Cygwin and use the Cygwin package manager to install the packages
+`cmake` and `ninja`.
 
 ## How to build ##
 
 1. Clone the git repository or download the source code archive and unpack it to
    an arbitrary directory (e.g. `load-static-shared-targets`).
-2. For building the module, type `cmake --preset default`. This will populate the
-   `build` directory with a CMake build tree.
-3. Now, you can build with `cmake --build ./build`. You should see some
+2. Go to this directory and type `cmake --list-presets`. A list of available
+   build configurations will be shown to you.
+3. For configuring the project, type `cmake --preset ninja`. This will populate
+   the `./build` directory with a CMake configuration tree. By default, the
+   configured installation directory is `./install`. You can specify a different
+   install location by setting the `CMAKE_INSTALL_PREFIX` variable:
+
+   ```shell
+   $ cmake --preset ninja -D "CMAKE_INSTALL_PREFIX=/path/to/install/prefix"
+   ```
+
+4. Now, you can build with `cmake --build --preset ninja`. You should see some
    informative terminal output.
-4. Finally, install the built artifacts to the `bin` folder with `cmake
-   --install ./build --prefix ./bin`. You can also specify a different install
-   prefix, e. g. if you want to install system-wide: `cmake --install ./build
-   --prefix /usr/local` (might require `sudo`).
+5. Finally, install the built artifacts to the configured install prefix with
+   `cmake --build --preset ninja --target install`. If the configured install
+   prefix is a system-wide location (like `/usr/local`), installing might
+   require `sudo`.
 
 Now, the `LoadStaticSharedTargets` module is installed and you can use it in
 other projects. The installed `LoadStaticSharedTargets` package is discoverable
@@ -45,7 +83,17 @@ FetchContent_MakeAvailable(LoadStaticSharedTargets)
 ```
 
 This discovers an installed version of the LoadStaticSharedTargets module or
-adds it to the other project's install targets.
+adds it to the other project's install targets. To help CMake discover an
+installed LoadStaticSharedTargets package, call CMake for the other project like
+this:
+
+```shell
+$ cmake -B ./build -D "CMAKE_PREFIX_PATH=/path/to/LoadStaticSharedTargets/install/prefix"
+```
+
+Replace the path to the LoadStaticSharedTargets install prefix with the actual
+path on your system! If LoadStaticSharedTargets is installed in a proper
+system-wide location, the `CMAKE_PREFIX_PATH` shouldn't be necessary.
 
 In the other project's package config CMake file, you can now use the module like this:
 
@@ -63,17 +111,6 @@ load_static_shared_targets(
 
 This adds the LoadStaticSharedTargets module to the `CMAKE_MODULE_PATH` variable
 which enables the include by name only.
-
-Then, to help CMake discover the LoadStaticSharedTargets package, call CMake for
-the other project like this:
-
-```shell
-$ cmake -B ./build -DCMAKE_PREFIX_PATH=/path/to/LoadStaticSharedTargets/install/prefix
-```
-
-Replace the path to the LoadStaticSharedTargets install prefix with the actual
-path on your system! If LoadStaticSharedTargets is installed in a proper
-system-wide location, the `CMAKE_PREFIX_PATH` shouldn't be necessary.
 
 ## Further Reading ##
 

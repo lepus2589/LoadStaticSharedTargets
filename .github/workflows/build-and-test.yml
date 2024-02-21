@@ -15,10 +15,10 @@ jobs:
           ninja --version
       - uses: actions/checkout@v4
       - name: configure
-        run: cmake --preset default
+        run: cmake --preset ninja
       - name: build
-        run: cmake --build ./build --verbose
+        run: cmake --build --preset ninja --verbose
       - name: install
-        run: cmake --install ./build --prefix ./bin
+        run: cmake --build --preset ninja --verbose --target install
       - name: test
-        run: cmake --build ./build --target test
+        run: cmake --build --preset ninja --verbose --target test

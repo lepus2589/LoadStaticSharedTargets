@@ -8,12 +8,42 @@
   "configurePresets": [
     {
       "name": "default",
-      "displayName": "Default Release Build",
-      "generator": "Ninja",
+      "hidden": true,
       "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "./install"
+      },
       "warnings": {
         "dev": false
       }
+    },
+    {
+      "name": "ninja",
+      "inherits": [
+        "default"
+      ],
+      "generator": "Ninja",
+      "displayName": "Default Build Configuration using Ninja"
+    },
+    {
+      "name": "make",
+      "inherits": [
+        "default"
+      ],
+      "generator": "Unix Makefiles",
+      "displayName": "Default Build Configuration using Makefiles"
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "ninja",
+      "displayName": "Default Build using Ninja",
+      "configurePreset": "ninja"
+    },
+    {
+      "name": "make",
+      "displayName": "Default Build using Make",
+      "configurePreset": "make"
     }
   ]
 }
