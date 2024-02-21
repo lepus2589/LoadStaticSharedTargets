@@ -37,7 +37,7 @@ else ()
     cmake_policy(VERSION ${CMAKE_MAXIMUM_SUPPORTED_VERSION})
 endif()
 
-project(LoadStaticSharedTargets VERSION 1.4.1 LANGUAGES NONE)
+project(LoadStaticSharedTargets VERSION 1.5.0 LANGUAGES NONE)
 
 include(GNUInstallDirs)
 
