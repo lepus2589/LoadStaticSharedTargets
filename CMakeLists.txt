@@ -38,7 +38,10 @@ string(COMPARE EQUAL "${CMAKE_PROJECT_NAME}" "${PROJECT_NAME}" IS_TOP_LEVEL)
 
 if (IS_TOP_LEVEL)
     include(CTest)
-    set(CMAKE_CTEST_ARGUMENTS "--verbose")
+
+    if (NOT DEFINED CMAKE_CTEST_ARGUMENTS)
+        set(CMAKE_CTEST_ARGUMENTS "--verbose")
+    endif ()
 endif ()
 
 add_subdirectory(src)
