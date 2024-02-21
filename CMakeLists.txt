@@ -25,10 +25,17 @@ SOFTWARE.
 
 cmake_minimum_required(VERSION 3.25)
 
-# If CMake >=3.24 is used, set policies up to v3.24 to NEW
-# if (NOT ${CMAKE_VERSION} VERSION_LESS 3.24)
-#     cmake_policy(VERSION 3.24)
-# endif()
+set(CMAKE_MAXIMUM_SUPPORTED_VERSION 3.28)
+
+# If CMAKE_VERSION <= CMAKE_MAXIMUM_SUPPORTED_VERSION is used, set policies up
+# to CMAKE_VERSION to NEW
+if (${CMAKE_VERSION} VERSION_LESS_EQUAL ${CMAKE_MAXIMUM_SUPPORTED_VERSION})
+    cmake_policy(VERSION ${CMAKE_VERSION})
+# If CMAKE_VERSION > CMAKE_MAXIMUM_SUPPORTED_VERSION is used, set policies up to
+# CMAKE_MAXIMUM_SUPPORTED_VERSION to NEW
+else ()
+    cmake_policy(VERSION ${CMAKE_MAXIMUM_SUPPORTED_VERSION})
+endif()
 
 project(LoadStaticSharedTargets VERSION 1.4.1 LANGUAGES NONE)
 

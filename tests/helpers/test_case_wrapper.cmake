@@ -25,6 +25,16 @@ SOFTWARE.
 
 cmake_policy(VERSION ${CMAKE_MINIMUM_REQUIRED_VERSION})
 
+# If CMAKE_VERSION <= CMAKE_MAXIMUM_SUPPORTED_VERSION is used, set policies up
+# to CMAKE_VERSION to NEW
+if (${CMAKE_VERSION} VERSION_LESS_EQUAL ${CMAKE_MAXIMUM_SUPPORTED_VERSION})
+    cmake_policy(VERSION ${CMAKE_VERSION})
+# If CMAKE_VERSION > CMAKE_MAXIMUM_SUPPORTED_VERSION is used, set policies up to
+# CMAKE_MAXIMUM_SUPPORTED_VERSION to NEW
+else ()
+    cmake_policy(VERSION ${CMAKE_MAXIMUM_SUPPORTED_VERSION})
+endif()
+
 include("./helpers/assertions.cmake")
 include("../src/cmake/LoadStaticSharedTargets.cmake")
 

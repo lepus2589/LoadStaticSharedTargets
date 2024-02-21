@@ -26,8 +26,13 @@ SOFTWARE.
 include(CMakePackageConfigHelpers)
 
 if (NOT DEFINED LoadStaticSharedTargets_INSTALL_CMAKEDIR)
-    set(LoadStaticSharedTargets_INSTALL_CMAKEDIR "${CMAKE_INSTALL_DATAROOTDIR}/cmake/${PROJECT_NAME}"
-        CACHE STRING "Path to LoadStaticSharedTargets CMake files")
+    set(
+        LoadStaticSharedTargets_INSTALL_CMAKEDIR
+        "${CMAKE_INSTALL_DATAROOTDIR}/cmake/${PROJECT_NAME}"
+        CACHE
+        STRING
+        "Path to LoadStaticSharedTargets CMake files"
+    )
 endif ()
 
 install(
@@ -42,10 +47,16 @@ write_basic_package_version_file(
     COMPATIBILITY SameMajorVersion
 )
 
+configure_file(
+    "LoadStaticSharedTargetsConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/LoadStaticSharedTargetsConfig.cmake"
+    @ONLY
+)
+
 install(
     FILES
     "${CMAKE_CURRENT_BINARY_DIR}/LoadStaticSharedTargetsConfigVersion.cmake"
-    "LoadStaticSharedTargetsConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/LoadStaticSharedTargetsConfig.cmake"
     "../src/cmake/LoadStaticSharedTargets.cmake"
     DESTINATION "${LoadStaticSharedTargets_INSTALL_CMAKEDIR}"
 )
