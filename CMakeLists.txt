@@ -41,17 +41,6 @@ if (IS_TOP_LEVEL)
     set(CMAKE_CTEST_ARGUMENTS "--verbose")
 endif ()
 
-# LoadStaticSharedTargets is a CMake script, which we never want to debug
-# If using a multi config generator
-get_property(_IS_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
-if (_IS_MULTI_CONFIG)
-    set(CMAKE_CONFIGURATION_TYPES "Release")
-    set(CMAKE_DEFAULT_BUILD_TYPE "Release")
-# If using a single config generator
-else ()
-    set(CMAKE_BUILD_TYPE "Release")
-endif ()
-
 add_subdirectory(src)
 
 if (IS_TOP_LEVEL AND BUILD_TESTING)
