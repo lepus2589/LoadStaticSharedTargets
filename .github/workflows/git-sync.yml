@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: git-sync-master
-        if: ${{ github.ref_type == 'branch' }}
         uses: wei/git-sync@v3
         with:
           source_repo: "lepus2589/LoadStaticSharedTargets"
@@ -20,7 +19,6 @@ jobs:
           destination_branch: "master"
           destination_ssh_private_key: ${{ secrets.DESTINATION_SSH_PRIVATE_KEY }}
       - name: git-sync-tags
-        if: ${{ github.ref_type == 'tag' }}
         uses: wei/git-sync@v3
         with:
           source_repo: "lepus2589/LoadStaticSharedTargets"
