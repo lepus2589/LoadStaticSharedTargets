@@ -27,15 +27,7 @@ cmake_minimum_required(VERSION 3.25)
 
 set(CMAKE_MAXIMUM_SUPPORTED_VERSION 3.28)
 
-# If CMAKE_VERSION <= CMAKE_MAXIMUM_SUPPORTED_VERSION is used, set policies up
-# to CMAKE_VERSION to NEW
-if (${CMAKE_VERSION} VERSION_LESS_EQUAL ${CMAKE_MAXIMUM_SUPPORTED_VERSION})
-    cmake_policy(VERSION ${CMAKE_VERSION})
-# If CMAKE_VERSION > CMAKE_MAXIMUM_SUPPORTED_VERSION is used, set policies up to
-# CMAKE_MAXIMUM_SUPPORTED_VERSION to NEW
-else ()
-    cmake_policy(VERSION ${CMAKE_MAXIMUM_SUPPORTED_VERSION})
-endif()
+include("./cmake/HandlePolicies.cmake" NO_POLICY_SCOPE)
 
 project(LoadStaticSharedTargets VERSION 1.5.0 LANGUAGES NONE)
 
@@ -51,6 +43,8 @@ if (IS_TOP_LEVEL)
     endif ()
 endif ()
 
+option(LoadStaticSharedTargets_INCLUDE_PACKAGING "Include packaging rules for LoadStaticSharedTargets" "${IS_TOP_LEVEL}")
+
 add_subdirectory(src)
 
 if (IS_TOP_LEVEL AND BUILD_TESTING)
@@ -58,8 +52,6 @@ if (IS_TOP_LEVEL AND BUILD_TESTING)
 
     add_subdirectory(tests EXCLUDE_FROM_ALL)
 endif ()
-
-option(LoadStaticSharedTargets_INCLUDE_PACKAGING "Include packaging rules for LoadStaticSharedTargets" "${IS_TOP_LEVEL}")
 
 if (LoadStaticSharedTargets_INCLUDE_PACKAGING)
     add_subdirectory(packaging)

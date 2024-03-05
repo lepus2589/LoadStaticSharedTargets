@@ -23,42 +23,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ]]
 
-include(CMakePackageConfigHelpers)
-
-if (NOT DEFINED LoadStaticSharedTargets_INSTALL_CMAKEDIR)
-    set(
-        LoadStaticSharedTargets_INSTALL_CMAKEDIR
-        "${CMAKE_INSTALL_DATAROOTDIR}/cmake/${PROJECT_NAME}"
-        CACHE
-        STRING
-        "Path to LoadStaticSharedTargets CMake files"
-    )
+if (NOT DEFINED CMAKE_MAXIMUM_SUPPORTED_VERSION)
+    set(CMAKE_MAXIMUM_SUPPORTED_VERSION ${CMAKE_MINIMUM_REQUIRED_VERSION})
 endif ()
 
-install(
-    FILES
-    "../LICENSE"
-    RENAME copyright
-    DESTINATION "${CMAKE_INSTALL_DOCDIR}"
-)
-
-write_basic_package_version_file(
-    LoadStaticSharedTargetsConfigVersion.cmake
-    COMPATIBILITY SameMajorVersion
-)
-
-file(READ "../cmake/HandlePolicies.cmake" HANDLE_POLICIES_SCRIPT OFFSET 1128)
-
-configure_file(
-    "LoadStaticSharedTargetsConfig.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/LoadStaticSharedTargetsConfig.cmake"
-    @ONLY
-)
-
-install(
-    FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/LoadStaticSharedTargetsConfigVersion.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/LoadStaticSharedTargetsConfig.cmake"
-    "../src/cmake/LoadStaticSharedTargets.cmake"
-    DESTINATION "${LoadStaticSharedTargets_INSTALL_CMAKEDIR}"
-)
+# If CMAKE_VERSION <= CMAKE_MAXIMUM_SUPPORTED_VERSION is used, set policies up
+# to CMAKE_VERSION to NEW
+if (${CMAKE_VERSION} VERSION_LESS_EQUAL ${CMAKE_MAXIMUM_SUPPORTED_VERSION})
+    cmake_policy(VERSION ${CMAKE_VERSION})
+# If CMAKE_VERSION > CMAKE_MAXIMUM_SUPPORTED_VERSION is used, set policies up to
+# CMAKE_MAXIMUM_SUPPORTED_VERSION to NEW
+else ()
+    cmake_policy(VERSION ${CMAKE_MAXIMUM_SUPPORTED_VERSION})
+endif()
