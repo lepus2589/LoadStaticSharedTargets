@@ -39,7 +39,7 @@ install(
     FILES
     "../LICENSE"
     RENAME copyright
-    DESTINATION "${CMAKE_INSTALL_DOCDIR}"
+    DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/doc/${PROJECT_NAME}"
 )
 
 write_basic_package_version_file(
