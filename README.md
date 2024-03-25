@@ -16,14 +16,18 @@ What you need:
 
 ### Linux (Ubuntu) ###
 
-Use your distribution's package manager to install the packages `cmake` and
-`ninja-build`.
+Use your distribution's package manager to install the necessary packages:
 
 ```shell
 $ sudo apt-get install cmake ninja-build
 ```
 
 ### Mac OS X ###
+
+You will need one of the community package managers for Mac OS X:
+[Homebrew](https://brew.sh/) or
+[MacPorts](https://www.macports.org/install.php). For installing one of these,
+please refer to their respective installation instructions.
 
 #### Homebrew ####
 
@@ -34,13 +38,25 @@ $ brew install cmake ninja
 #### MacPorts ####
 
 ```shell
-$ sudo port install cmake ninja
+$ sudo port -vb install cmake-devel ninja
 ```
 
 ### Windows ###
 
-Install Cygwin and use the Cygwin package manager to install the packages
-`cmake` and `ninja`.
+The easiest thing to do is using the [Windows Subsystem for Linux
+(WSL)](https://learn.microsoft.com/en-us/windows/wsl/install) and follow the
+Linux instructions above.
+
+Otherwise, install [Git for Windows](https://gitforwindows.org/) for version
+control and [cygwin](https://cygwin.com/install.html), which is a large
+collection of GNU and Open Source tools which provide functionality similar to a
+Linux distribution on Windows. During the `cygwin` installation you'll be
+prompted to add additional packages. Search and select the following:
+
+- `cmake` and `ninja` for the build system
+
+After `cygwin` finishes installing, use the cygwin terminal to start the build
+process.
 
 ## How to build ##
 
