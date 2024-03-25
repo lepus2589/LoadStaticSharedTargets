@@ -29,7 +29,7 @@ set(CMAKE_MAXIMUM_SUPPORTED_VERSION 3.28)
 
 include("./cmake/HandlePolicies.cmake" NO_POLICY_SCOPE)
 
-project(LoadStaticSharedTargets VERSION 1.5.1 LANGUAGES NONE)
+project(LoadStaticSharedTargets VERSION 1.5.2 LANGUAGES NONE)
 
 include(GNUInstallDirs)
 
