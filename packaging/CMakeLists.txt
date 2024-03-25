@@ -49,10 +49,10 @@ write_basic_package_version_file(
 
 file(READ "../cmake/HandlePolicies.cmake" HANDLE_POLICIES_SCRIPT OFFSET 1128)
 
-configure_file(
+configure_package_config_file(
     "LoadStaticSharedTargetsConfig.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/LoadStaticSharedTargetsConfig.cmake"
-    @ONLY
+    INSTALL_DESTINATION "${LoadStaticSharedTargets_INSTALL_CMAKEDIR}"
 )
 
 install(
