@@ -25,7 +25,7 @@ SOFTWARE.
 
 cmake_minimum_required(VERSION 3.25)
 
-set(CMAKE_MAXIMUM_SUPPORTED_VERSION 3.28)
+set(CMAKE_MAXIMUM_SUPPORTED_VERSION 3.29)
 
 include("./cmake/HandlePolicies.cmake" NO_POLICY_SCOPE)
 
