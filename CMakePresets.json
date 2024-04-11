@@ -11,7 +11,7 @@
       "hidden": true,
       "binaryDir": "${sourceDir}/build",
       "cacheVariables": {
-        "CMAKE_INSTALL_PREFIX": "./install"
+        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install"
       },
       "warnings": {
         "dev": false
