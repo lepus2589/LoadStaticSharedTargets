@@ -28,7 +28,7 @@ include(CMakePackageConfigHelpers)
 if (NOT DEFINED LoadStaticSharedTargets_INSTALL_CMAKEDIR)
     set(
         LoadStaticSharedTargets_INSTALL_CMAKEDIR
-        "${CMAKE_INSTALL_DATAROOTDIR}/cmake/${PROJECT_NAME}"
+        "${CMAKE_INSTALL_DATAROOTDIR}/cmake/${PROJECT_NAME}-${PROJECT_VERSION}"
         CACHE
         STRING
         "Path to LoadStaticSharedTargets CMake files"
@@ -39,7 +39,7 @@ install(
     FILES
     "../LICENSE"
     RENAME copyright
-    DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/doc/${PROJECT_NAME}"
+    DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/doc/${PROJECT_NAME}-${PROJECT_VERSION}"
 )
 
 write_basic_package_version_file(
