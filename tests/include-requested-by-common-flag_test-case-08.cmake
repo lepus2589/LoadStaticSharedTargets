@@ -38,4 +38,4 @@ set(
 
 include("./helpers/testee_macro_wrapper.cmake")
 
-REQUIRE_TRUTHY(TEST_TARGET_1)
+REQUIRE_TARGET_DEFINED(SUCCESS_TARGET_1)

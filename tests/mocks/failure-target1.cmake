@@ -1,2 +1,2 @@
 message(STATUS "Wrong target included.")
-set(TEST_TARGET_1 FALSE)
+SET_TARGET_MOCK(FAILURE_TARGET_1)

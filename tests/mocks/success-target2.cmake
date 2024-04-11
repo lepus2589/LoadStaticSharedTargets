@@ -1,2 +1,2 @@
 message(STATUS "Correct target successfully included.")
-set(TEST_TARGET_2 TRUE)
+SET_TARGET_MOCK(SUCCESS_TARGET_2)
