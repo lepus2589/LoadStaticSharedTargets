@@ -84,26 +84,26 @@ macro(load_static_shared_targets)
 
     # Static component requested
     if (${CMAKE_FIND_PACKAGE_NAME}_COMP_static)
-        _static_shared_load_targets(STATIC)
+        _load_static_shared_targets_load_targets(STATIC)
     # Shared component requested
     elseif (${CMAKE_FIND_PACKAGE_NAME}_COMP_shared)
-        _static_shared_load_targets(SHARED)
+        _load_static_shared_targets_load_targets(SHARED)
     # ${CMAKE_FIND_PACKAGE_NAME}_SHARED_LIBS cache variable set to ON
     elseif (DEFINED ${CMAKE_FIND_PACKAGE_NAME}_SHARED_LIBS AND ${CMAKE_FIND_PACKAGE_NAME}_SHARED_LIBS)
-        _static_shared_load_targets(SHARED)
+        _load_static_shared_targets_load_targets(SHARED)
     # ${CMAKE_FIND_PACKAGE_NAME}_SHARED_LIBS cache variable set to OFF
     elseif (DEFINED ${CMAKE_FIND_PACKAGE_NAME}_SHARED_LIBS AND NOT ${CMAKE_FIND_PACKAGE_NAME}_SHARED_LIBS)
-        _static_shared_load_targets(STATIC)
+        _load_static_shared_targets_load_targets(STATIC)
     # BUILD_SHARED_LIBS variable set to ON
     elseif (BUILD_SHARED_LIBS)
         # If shared targets are installed, include them.
         # Otherwise at least load the static targets
-        _static_shared_load_targets(SHARED ALTERNATIVE STATIC)
+        _load_static_shared_targets_load_targets(SHARED ALTERNATIVE STATIC)
     # BUILD_SHARED_LIBS variable set to OFF
     else ()
         # If static targets are installed, include them.
         # Otherwise at least load the shared targets
-        _static_shared_load_targets(STATIC ALTERNATIVE SHARED)
+        _load_static_shared_targets_load_targets(STATIC ALTERNATIVE SHARED)
     endif ()
 
     unset(${CMAKE_FIND_PACKAGE_NAME}_KNOWN_COMPS)
@@ -117,7 +117,7 @@ endmacro()
 # Macro to check, if the target files for the requested type are all installed.
 # If so, include them. Otherwise, try alternative type, if given. Do error
 # handling, if not.
-macro(_static_shared_load_targets TYPE)
+macro(_load_static_shared_targets_load_targets TYPE)
     cmake_parse_arguments(${CMAKE_FIND_PACKAGE_NAME} "" "ALTERNATIVE" "" ${ARGN})
     # We now have ${CMAKE_FIND_PACKAGE_NAME}_ALTERNATIVE variable created for us.
 
@@ -151,7 +151,7 @@ macro(_static_shared_load_targets TYPE)
             "Requested `${TYPE}` targets for package ${CMAKE_FIND_PACKAGE_NAME} were not found. "
             "Trying alternative `${${CMAKE_FIND_PACKAGE_NAME}_ALTERNATIVE}` targets."
         )
-        _static_shared_load_targets(${${CMAKE_FIND_PACKAGE_NAME}_ALTERNATIVE})
+        _load_static_shared_targets_load_targets(${${CMAKE_FIND_PACKAGE_NAME}_ALTERNATIVE})
     else ()
         set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE
             "${CMAKE_FIND_PACKAGE_NAME} `${TYPE}` libraries were requested but not found.")
