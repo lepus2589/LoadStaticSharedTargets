@@ -23,13 +23,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ]]
 
-cmake_minimum_required(VERSION 3.25)
-
 set(CMAKE_MAXIMUM_SUPPORTED_VERSION 3.31)
 
-include("./cmake/HandlePolicies.cmake" NO_POLICY_SCOPE)
+cmake_minimum_required(VERSION 3.30...${CMAKE_MAXIMUM_SUPPORTED_VERSION})
 
-project(LoadStaticSharedTargets VERSION 1.7.0 LANGUAGES NONE)
+project(LoadStaticSharedTargets VERSION 1.8.0 LANGUAGES NONE)
 
 include(GNUInstallDirs)
 

@@ -131,9 +131,9 @@ include(FetchContent)
 FetchContent_Declare(
     LoadStaticSharedTargets
     GIT_REPOSITORY "https://github.com/lepus2589/LoadStaticSharedTargets.git"
-    GIT_TAG v1.7.0
+    GIT_TAG v1.8.0
     SYSTEM
-    FIND_PACKAGE_ARGS 1.7.0 CONFIG NAMES LoadStaticSharedTargets
+    FIND_PACKAGE_ARGS 1.8.0 CONFIG NAMES LoadStaticSharedTargets
 )
 set(LoadStaticSharedTargets_INCLUDE_PACKAGING TRUE)
 FetchContent_MakeAvailable(LoadStaticSharedTargets)

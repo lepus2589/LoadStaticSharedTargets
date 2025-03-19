@@ -47,8 +47,6 @@ write_basic_package_version_file(
     COMPATIBILITY SameMajorVersion
 )
 
-file(READ "../cmake/HandlePolicies.cmake" HANDLE_POLICIES_SCRIPT OFFSET 1128)
-
 configure_package_config_file(
     "LoadStaticSharedTargetsConfig.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/LoadStaticSharedTargetsConfig.cmake"
