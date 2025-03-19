@@ -26,9 +26,9 @@ SOFTWARE.
 # LoadStaticSharedTargets #
 
 This CMake module contains a macro for loading static or shared exported library
-targets in a CMake package config file. Static or shared targets can be
-explicitly (via `COMPONENTS`) or implicitly (via `BUILD_SHARED_LIBS`) imported
-with the `find_package()` command.
+targets in a CMake package config file. Static or shared targets can be imported
+explicitly (via `COMPONENTS`) or implicitly (via `BUILD_SHARED_LIBS`) with the
+`find_package()` command.
 
 ## Prerequisites ##
 
@@ -63,7 +63,7 @@ $ brew install cmake ninja
 #### MacPorts ####
 
 ```shell
-$ sudo port -vb install cmake-devel ninja
+$ sudo port -v install cmake ninja
 ```
 
 ### Windows ###
@@ -87,27 +87,42 @@ process.
 
 1. Clone the git repository or download the source code archive and unpack it to
    an arbitrary directory (e.g. `load-static-shared-targets`).
-2. Go to this directory and type `cmake --list-presets`. A list of available
-   build configurations will be shown to you.
-3. For configuring the project, type `cmake --preset ninja`. This will populate
-   the `./build` directory with a CMake configuration tree. By default, the
-   configured installation directory is `./install`. You can specify a different
-   install location by setting the `CMAKE_INSTALL_PREFIX` variable:
+2. Go to this directory and type `cmake --workflow --list-presets`. A list of
+   available build workflows will be shown to you.
+3. For configuring, building and installing the project, type `cmake --workflow
+   --preset dev-ninja`. This will populate the `./build` directory with a CMake
+   configuration tree, execute the build and install the project. By default,
+   the configured installation directory is `./install`.
+4. For running the tests, type `cmake --workflow --preset ci-ninja`.
+
+### How to customize the build from the command line ###
+
+1. You can specify a different install location by using the configure preset
+   directly while setting the `CMAKE_INSTALL_PREFIX` variable:
 
    ```shell
    $ cmake --preset ninja -D "CMAKE_INSTALL_PREFIX=/path/to/install/prefix"
    ```
 
-4. Now, you can build with `cmake --build --preset ninja`. You should see some
-   informative terminal output.
-5. Finally, install the built artifacts to the configured install prefix with
-   `cmake --build --preset ninja --target install`. If the configured install
-   prefix is a system-wide location (like `/usr/local`), installing might
-   require `sudo`.
+   If the configured install prefix is a system-wide location (like
+   `/usr/local`), installing might require `sudo`.
 
-Now, the `LoadStaticSharedTargets` module is installed and you can use it in
-other projects. The installed `LoadStaticSharedTargets` package is discoverable
-by CMake as __LoadStaticSharedTargets__. In the `CMakeLists.txt` of the other
+2. Now, you can build manually with `cmake --build --preset ninja-install`. You
+   should see some informative terminal output.
+
+### How to customize the build using user presets ###
+
+Create the file `./CMakeUserPresets.json` and build your own configure, build,
+test or workflow presets by inheriting from the project's default presets.
+Please refer to the [CMake Documentation about presets][1] for details.
+
+[1]: https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html
+
+## How to use ##
+
+With the `LoadStaticSharedTargets` module installed, you can use it in other
+projects. The installed `LoadStaticSharedTargets` package is discoverable by
+CMake as __LoadStaticSharedTargets__. In the `CMakeLists.txt` of the other
 project, do the following:
 
 ```cmake
@@ -116,9 +131,9 @@ include(FetchContent)
 FetchContent_Declare(
     LoadStaticSharedTargets
     GIT_REPOSITORY "https://github.com/lepus2589/LoadStaticSharedTargets.git"
-    GIT_TAG v1.5.2
+    GIT_TAG v1.7.0
     SYSTEM
-    FIND_PACKAGE_ARGS 1.5.2 CONFIG NAMES LoadStaticSharedTargets
+    FIND_PACKAGE_ARGS 1.7.0 CONFIG NAMES LoadStaticSharedTargets
 )
 set(LoadStaticSharedTargets_INCLUDE_PACKAGING TRUE)
 FetchContent_MakeAvailable(LoadStaticSharedTargets)
@@ -151,8 +166,8 @@ load_static_shared_targets(
 )
 ```
 
-This adds the LoadStaticSharedTargets module to the `CMAKE_MODULE_PATH` variable
-which enables the include by name only.
+The `find_package()` command adds the LoadStaticSharedTargets module to the
+`CMAKE_MODULE_PATH` variable which enables the `include()` by name only.
 
 ## Further Reading ##
 

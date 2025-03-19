@@ -7,18 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: prepare
-        run: sudo apt-get install -y ninja-build
+        run: sudo apt-get install -y git cmake ninja-build
       - name: info
         run: |
           git version
           cmake --version
           ninja --version
       - uses: actions/checkout@v4
-      - name: configure
-        run: cmake --preset ninja
-      - name: build
-        run: cmake --build --preset ninja --verbose
-      - name: install
-        run: cmake --build --preset ninja --verbose --target install
-      - name: test
-        run: cmake --build --preset ninja --verbose --target check
+      - name: build-and-test
+        run: cmake --workflow --preset ci-ninja

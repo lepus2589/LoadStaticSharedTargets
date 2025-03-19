@@ -25,11 +25,11 @@ SOFTWARE.
 
 cmake_minimum_required(VERSION 3.25)
 
-set(CMAKE_MAXIMUM_SUPPORTED_VERSION 3.29)
+set(CMAKE_MAXIMUM_SUPPORTED_VERSION 3.31)
 
 include("./cmake/HandlePolicies.cmake" NO_POLICY_SCOPE)
 
-project(LoadStaticSharedTargets VERSION 1.6.0 LANGUAGES NONE)
+project(LoadStaticSharedTargets VERSION 1.7.0 LANGUAGES NONE)
 
 include(GNUInstallDirs)
 
@@ -37,10 +37,6 @@ string(COMPARE EQUAL "${CMAKE_PROJECT_NAME}" "${PROJECT_NAME}" IS_TOP_LEVEL)
 
 if (IS_TOP_LEVEL)
     include(CTest)
-
-    if (NOT DEFINED CMAKE_CTEST_ARGUMENTS)
-        set(CMAKE_CTEST_ARGUMENTS "--verbose")
-    endif ()
 endif ()
 
 option(LoadStaticSharedTargets_INCLUDE_PACKAGING "Include packaging rules for LoadStaticSharedTargets" "${IS_TOP_LEVEL}")
@@ -48,8 +44,6 @@ option(LoadStaticSharedTargets_INCLUDE_PACKAGING "Include packaging rules for Lo
 add_subdirectory(src)
 
 if (IS_TOP_LEVEL AND BUILD_TESTING)
-    add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} -V)
-
     add_subdirectory(tests EXCLUDE_FROM_ALL)
 endif ()
 

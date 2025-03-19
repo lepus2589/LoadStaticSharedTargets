@@ -36,14 +36,136 @@
   ],
   "buildPresets": [
     {
+      "name": "verbose",
+      "hidden": true,
+      "verbose": true
+    },
+    {
       "name": "ninja",
+      "inherits": [
+        "verbose"
+      ],
       "displayName": "Default Build using Ninja",
       "configurePreset": "ninja"
     },
     {
+      "name": "ninja-install",
+      "inherits": [
+        "ninja"
+      ],
+      "displayName": "Default Build and Installation using Ninja",
+      "targets": [
+        "install"
+      ]
+    },
+    {
       "name": "make",
+      "inherits": [
+        "verbose"
+      ],
       "displayName": "Default Build using Make",
       "configurePreset": "make"
+    },
+    {
+      "name": "make-install",
+      "inherits": [
+        "make"
+      ],
+      "displayName": "Default Build and Installation using Make",
+      "targets": [
+        "install"
+      ]
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "verbose",
+      "hidden": true,
+      "output": {
+        "verbosity": "verbose"
+      }
+    },
+    {
+      "name": "ninja",
+      "inherits": [
+        "verbose"
+      ],
+      "displayName": "Default Test using Ninja",
+      "configurePreset": "ninja"
+    },
+    {
+      "name": "make",
+      "inherits": [
+        "verbose"
+      ],
+      "displayName": "Default Test using Make",
+      "configurePreset": "make"
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "dev-ninja",
+      "displayName": "Developer Workflow using Ninja",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ninja"
+        },
+        {
+          "type": "build",
+          "name": "ninja-install"
+        }
+      ]
+    },
+    {
+      "name": "ci-ninja",
+      "displayName": "CI Workflow using Ninja",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "ninja"
+        },
+        {
+          "type": "build",
+          "name": "ninja"
+        },
+        {
+          "type": "test",
+          "name": "ninja"
+        }
+      ]
+    },
+    {
+      "name": "dev-make",
+      "displayName": "Developer Workflow using Make",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "make"
+        },
+        {
+          "type": "build",
+          "name": "make-install"
+        }
+      ]
+    },
+    {
+      "name": "ci-make",
+      "displayName": "CI Workflow using Make",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "make"
+        },
+        {
+          "type": "build",
+          "name": "make"
+        },
+        {
+          "type": "test",
+          "name": "make"
+        }
+      ]
     }
   ]
 }
