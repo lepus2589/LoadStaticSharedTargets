@@ -29,8 +29,6 @@ cmake_minimum_required(VERSION 3.30...${CMAKE_MAXIMUM_SUPPORTED_VERSION})
 
 project(LoadStaticSharedTargets VERSION 1.8.0 LANGUAGES NONE)
 
-include(GNUInstallDirs)
-
 string(COMPARE EQUAL "${CMAKE_PROJECT_NAME}" "${PROJECT_NAME}" IS_TOP_LEVEL)
 
 if (IS_TOP_LEVEL)
@@ -42,7 +40,7 @@ option(LoadStaticSharedTargets_INCLUDE_PACKAGING "Include packaging rules for Lo
 add_subdirectory(src)
 
 if (IS_TOP_LEVEL AND BUILD_TESTING)
-    add_subdirectory(tests EXCLUDE_FROM_ALL)
+    add_subdirectory(tests)
 endif ()
 
 if (LoadStaticSharedTargets_INCLUDE_PACKAGING)

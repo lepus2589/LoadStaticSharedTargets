@@ -28,6 +28,6 @@ SOFTWARE.
 cmake_minimum_required(VERSION @CMAKE_MINIMUM_REQUIRED_VERSION@...@CMAKE_MAXIMUM_SUPPORTED_VERSION@)
 
 # include(LoadStaticSharedTargets) should work after this
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}")
+list(APPEND CMAKE_MODULE_PATH "@PACKAGE_LoadStaticSharedTargets_INSTALL_CMAKEDIR@")
 
 check_required_components(LoadStaticSharedTargets)

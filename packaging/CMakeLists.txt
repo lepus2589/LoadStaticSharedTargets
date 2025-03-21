@@ -23,15 +23,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ]]
 
+include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
 if (NOT DEFINED LoadStaticSharedTargets_INSTALL_CMAKEDIR)
     set(
         LoadStaticSharedTargets_INSTALL_CMAKEDIR
         "${CMAKE_INSTALL_DATAROOTDIR}/cmake/${PROJECT_NAME}-${PROJECT_VERSION}"
-        CACHE
-        STRING
-        "Path to LoadStaticSharedTargets CMake files"
     )
 endif ()
 
@@ -51,6 +49,7 @@ configure_package_config_file(
     "LoadStaticSharedTargetsConfig.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/LoadStaticSharedTargetsConfig.cmake"
     INSTALL_DESTINATION "${LoadStaticSharedTargets_INSTALL_CMAKEDIR}"
+    PATH_VARS LoadStaticSharedTargets_INSTALL_CMAKEDIR
 )
 
 install(
