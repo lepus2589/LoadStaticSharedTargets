@@ -29,9 +29,6 @@ if (NOT DEFINED LoadStaticSharedTargets_INSTALL_CMAKEDIR)
     set(
         LoadStaticSharedTargets_INSTALL_CMAKEDIR
         "${CMAKE_INSTALL_DATAROOTDIR}/cmake/${PROJECT_NAME}-${PROJECT_VERSION}"
-        CACHE
-        STRING
-        "Path to LoadStaticSharedTargets CMake files"
     )
 endif ()
 

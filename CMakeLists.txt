@@ -42,7 +42,7 @@ option(LoadStaticSharedTargets_INCLUDE_PACKAGING "Include packaging rules for Lo
 add_subdirectory(src)
 
 if (IS_TOP_LEVEL AND BUILD_TESTING)
-    add_subdirectory(tests EXCLUDE_FROM_ALL)
+    add_subdirectory(tests)
 endif ()
 
 if (LoadStaticSharedTargets_INCLUDE_PACKAGING)
