@@ -87,34 +87,28 @@ process.
 
 1. Clone the git repository or download the source code archive and unpack it to
    an arbitrary directory (e.g. `load-static-shared-targets`).
-2. Go to this directory and type `cmake --workflow --list-presets`. A list of
-   available build workflows will be shown to you.
-3. For configuring, building and installing the project, type `cmake --workflow
-   --preset dev-ninja`. This will populate the `./build` directory with a CMake
+2. Go to this directory and type `cp ./CMakeUserPresets.template.json
+   ./CMakeUserPresets.json`.
+3. Next, type `cmake --workflow --list-presets`. A list of available build
+   workflows will be shown to you.
+4. For configuring, building and installing the project, type `cmake --workflow
+   --preset user-install`. This will populate the `./build` directory with a CMake
    configuration tree, execute the build and install the project. By default,
    the configured installation directory is `./install`.
-4. For running the tests, type `cmake --workflow --preset ci-ninja`.
 
-### How to customize the build from the command line ###
+   You can specify a different install location by setting the
+   `CMAKE_INSTALL_PREFIX` variable in the `"user-config"` preset in your
+   `./CMakeUserPresets.json`:
 
-1. You can specify a different install location by using the configure preset
-   directly while setting the `CMAKE_INSTALL_PREFIX` variable:
-
-   ```shell
-   $ cmake --preset ninja -D "CMAKE_INSTALL_PREFIX=/path/to/install/prefix"
+   ```json
+      "cacheVariables": {
+         "CMAKE_INSTALL_PREFIX": "$env{HOME}/.local"
+      }
    ```
 
-   If the configured install prefix is a system-wide location (like
-   `/usr/local`), installing might require `sudo`.
+   Please refer to the [CMake Documentation about presets][1] for further details.
 
-2. Now, you can build manually with `cmake --build --preset ninja-install`. You
-   should see some informative terminal output.
-
-### How to customize the build using user presets ###
-
-Create the file `./CMakeUserPresets.json` and build your own configure, build,
-test or workflow presets by inheriting from the project's default presets.
-Please refer to the [CMake Documentation about presets][1] for details.
+5. For running the tests, type `cmake --workflow --preset user-test`.
 
 [1]: https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html
 

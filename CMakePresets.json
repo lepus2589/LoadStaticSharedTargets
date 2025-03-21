@@ -5,165 +5,85 @@
     "minor": 25,
     "patch": 0
   },
+  "include": [
+    "./CMakePresetsCommon.json"
+  ],
   "configurePresets": [
     {
-      "name": "default",
+      "name": "config",
       "hidden": true,
       "binaryDir": "${sourceDir}/build",
-      "cacheVariables": {
-        "CMAKE_INSTALL_PREFIX": "${sourceDir}/install"
-      },
       "warnings": {
         "dev": false
       }
     },
     {
-      "name": "ninja",
+      "name": "default",
       "inherits": [
-        "default"
+        "install",
+        "config"
       ],
-      "generator": "Ninja",
-      "displayName": "Default Build Configuration using Ninja"
-    },
-    {
-      "name": "make",
-      "inherits": [
-        "default"
-      ],
-      "generator": "Unix Makefiles",
-      "displayName": "Default Build Configuration using Makefiles"
+      "displayName": "Default Build Configuration"
     }
   ],
   "buildPresets": [
     {
-      "name": "verbose",
-      "hidden": true,
-      "verbose": true
-    },
-    {
-      "name": "ninja",
+      "name": "default",
       "inherits": [
         "verbose"
       ],
-      "displayName": "Default Build using Ninja",
-      "configurePreset": "ninja"
+      "displayName": "Default Build",
+      "configurePreset": "default"
     },
     {
-      "name": "ninja-install",
+      "name": "default-install",
       "inherits": [
-        "ninja"
-      ],
-      "displayName": "Default Build and Installation using Ninja",
-      "targets": [
+        "default",
         "install"
-      ]
-    },
-    {
-      "name": "make",
-      "inherits": [
-        "verbose"
       ],
-      "displayName": "Default Build using Make",
-      "configurePreset": "make"
-    },
-    {
-      "name": "make-install",
-      "inherits": [
-        "make"
-      ],
-      "displayName": "Default Build and Installation using Make",
-      "targets": [
-        "install"
-      ]
+      "displayName": "Default Build and Installation"
     }
   ],
   "testPresets": [
     {
-      "name": "verbose",
-      "hidden": true,
-      "output": {
-        "verbosity": "verbose"
-      }
-    },
-    {
-      "name": "ninja",
+      "name": "default",
       "inherits": [
         "verbose"
       ],
-      "displayName": "Default Test using Ninja",
-      "configurePreset": "ninja"
-    },
-    {
-      "name": "make",
-      "inherits": [
-        "verbose"
-      ],
-      "displayName": "Default Test using Make",
-      "configurePreset": "make"
+      "displayName": "Default Test",
+      "configurePreset": "default"
     }
   ],
   "workflowPresets": [
     {
-      "name": "dev-ninja",
-      "displayName": "Developer Workflow using Ninja",
+      "name": "default",
+      "displayName": "Default Workflow",
       "steps": [
         {
           "type": "configure",
-          "name": "ninja"
+          "name": "default"
         },
         {
           "type": "build",
-          "name": "ninja-install"
-        }
-      ]
-    },
-    {
-      "name": "ci-ninja",
-      "displayName": "CI Workflow using Ninja",
-      "steps": [
-        {
-          "type": "configure",
-          "name": "ninja"
-        },
-        {
-          "type": "build",
-          "name": "ninja"
+          "name": "default"
         },
         {
           "type": "test",
-          "name": "ninja"
+          "name": "default"
         }
       ]
     },
     {
-      "name": "dev-make",
-      "displayName": "Developer Workflow using Make",
+      "name": "default-install",
+      "displayName": "Install Workflow",
       "steps": [
         {
           "type": "configure",
-          "name": "make"
+          "name": "default"
         },
         {
           "type": "build",
-          "name": "make-install"
-        }
-      ]
-    },
-    {
-      "name": "ci-make",
-      "displayName": "CI Workflow using Make",
-      "steps": [
-        {
-          "type": "configure",
-          "name": "make"
-        },
-        {
-          "type": "build",
-          "name": "make"
-        },
-        {
-          "type": "test",
-          "name": "make"
+          "name": "default-install"
         }
       ]
     }
