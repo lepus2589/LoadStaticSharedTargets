@@ -15,4 +15,6 @@ jobs:
           ninja --version
       - uses: actions/checkout@v4
       - name: build-and-test
-        run: cmake --workflow --preset ci-ninja
+        run: |
+          cp "./CMakeUserPresets.template.json" "./CMakeUserPresets.json"
+          cmake --workflow --preset user-test
