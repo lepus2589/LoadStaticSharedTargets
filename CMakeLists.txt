@@ -39,6 +39,10 @@ option(LoadStaticSharedTargets_INCLUDE_PACKAGING "Include packaging rules for Lo
 
 add_subdirectory(src)
 
+if (NOT IS_TOP_LEVEL)
+    set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" PARENT_SCOPE)
+endif ()
+
 if (IS_TOP_LEVEL AND BUILD_TESTING)
     add_subdirectory(tests)
 endif ()

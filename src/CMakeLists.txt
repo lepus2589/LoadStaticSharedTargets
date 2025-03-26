@@ -26,3 +26,5 @@ SOFTWARE.
 add_custom_target(LoadStaticSharedTargets ALL)
 
 add_subdirectory(cmake)
+
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" PARENT_SCOPE)

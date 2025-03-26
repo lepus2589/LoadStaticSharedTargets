@@ -25,4 +25,5 @@ SOFTWARE.
 
 target_sources(LoadStaticSharedTargets PRIVATE LoadStaticSharedTargets.cmake)
 
-include(LoadStaticSharedTargets.cmake)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}")
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" PARENT_SCOPE)
